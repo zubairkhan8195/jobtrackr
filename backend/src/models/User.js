@@ -3,7 +3,7 @@ const bcrypt = require("bcryptjs");
 
 
 const userSchema = new Schema(
-    {
+{
     name: {
         type: String,
         required: [true, "Name is required"],
@@ -29,9 +29,10 @@ const userSchema = new Schema(
         default: "user",                 
       },
 },
- {
+{
     timestamps: true
-});
+}
+);
 
 // Save se pehle: agar password modify hua hai, to hash kar do
 userSchema.pre("save", async function () {
