@@ -2,6 +2,10 @@ const Application = require("../models/Application");
 const Note = require("../models/Note");
 const asyncHandler = require("../middleware/asyncHandler");
 const getOwnedApplication = require("../utils/getOwnedApplication");
+const {
+  buildApplicationFilter,
+  buildSort,
+} = require("../utils/buildApplicationQuery");
 
 const createApplication = asyncHandler(async (req, res) => {
   const application = await Application.create({
@@ -17,14 +21,30 @@ const createApplication = asyncHandler(async (req, res) => {
 });
 
 const getApplications = asyncHandler(async (req, res) => {
-  const applications = await Application.find({ user: req.user._id }).sort({
-    appliedDate: -1,
+  const { page, limit, status, search, source, sort } = req.query;
+
+  const filter = buildApplicationFilter(req.user._id, {
+    status,
+    source,
+    search,
   });
+  const sortObj = buildSort(sort);
+  const skip = (page - 1) * limit;
+
+  const [applications, total] = await Promise.all([
+    Application.find(filter).sort(sortObj).skip(skip).limit(limit),
+    Application.countDocuments(filter),
+  ]);
 
   res.status(200).json({
     success: true,
     data: applications,
-    count: applications.length,
+    pagination: {
+      page,
+      limit,
+      total,
+      totalPages: Math.ceil(total / limit),
+    },
   });
 });
 

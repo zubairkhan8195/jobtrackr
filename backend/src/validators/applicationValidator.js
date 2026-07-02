@@ -27,7 +27,14 @@ const createApplicationSchema = z
 
 const updateApplicationSchema = createApplicationSchema.partial();
 
-const SORTABLE_FIELDS = ["appliedDate", "salary", "company"];
+const SORTABLE_FIELDS = [
+  "salary",
+  "company",
+  "position",
+  "status",
+  "createdAt",
+  "appliedDate",
+];
 
 const applicationQuerySchema = z
   .object({

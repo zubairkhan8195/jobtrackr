@@ -1,5 +1,5 @@
 const express = require("express");
-const { validate, validateParams } = require("../middleware/validate");
+const { validate, validateParams, validateQuery } = require("../middleware/validate");
 const {
   createApplication,
   getApplications,
@@ -10,13 +10,14 @@ const {
 const {
   createApplicationSchema,
   updateApplicationSchema,
+  applicationQuerySchema,
 } = require("../validators/applicationValidator");
 const { objectIdParamSchema } = require("../validators/common");
 const { protect } = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
-router.get("/", protect, getApplications);
+router.get("/", protect, validateQuery(applicationQuerySchema), getApplications);
 router.get("/:id", protect, validateParams(objectIdParamSchema("id")), getApplicationById);
 router.post("/", protect, validate(createApplicationSchema), createApplication);
 router.put(
