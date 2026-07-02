@@ -29,14 +29,6 @@ const updateApplicationSchema = createApplicationSchema.partial();
 
 const SORTABLE_FIELDS = ["appliedDate", "salary", "company"];
 
-const objectIdRegex = /^[0-9a-fA-F]{24}$/;
-
-const idParamSchema = z
-  .object({
-    id: z.string().regex(objectIdRegex, "Invalid ID"),
-  })
-  .strict();
-
 const applicationQuerySchema = z
   .object({
     page: z.coerce.number().min(1).default(1),
@@ -59,7 +51,7 @@ const applicationQuerySchema = z
         },
         {
           message: `Invalid sort. Allowed fields: ${SORTABLE_FIELDS.join(", ")}. Prefix with - for descending order.`,
-        }
+        },
       ),
   })
   .strict();
@@ -67,6 +59,5 @@ const applicationQuerySchema = z
 module.exports = {
   createApplicationSchema,
   updateApplicationSchema,
-  idParamSchema,
   applicationQuerySchema,
 };

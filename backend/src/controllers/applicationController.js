@@ -1,20 +1,7 @@
 const Application = require("../models/Application");
+const Note = require("../models/Note");
 const asyncHandler = require("../middleware/asyncHandler");
-const ApiError = require("../utils/ApiError");
-
-const getOwnedApplication = async (id, userId) => {
-  const application = await Application.findById(id);
-
-  if (!application) {
-    throw new ApiError(404, "Application not found");
-  }
-
-  if (!application.user.equals(userId)) {
-    throw new ApiError(403, "Not authorized to access this application");
-  }
-
-  return application;
-};
+const getOwnedApplication = require("../utils/getOwnedApplication");
 
 const createApplication = asyncHandler(async (req, res) => {
   const application = await Application.create({
@@ -66,6 +53,7 @@ const updateApplication = asyncHandler(async (req, res) => {
 const deleteApplication = asyncHandler(async (req, res) => {
   const application = await getOwnedApplication(req.params.id, req.user._id);
 
+  await Note.deleteMany({ application: application._id });
   await application.deleteOne();
 
   res.status(200).json({

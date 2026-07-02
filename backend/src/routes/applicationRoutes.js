@@ -10,22 +10,22 @@ const {
 const {
   createApplicationSchema,
   updateApplicationSchema,
-  idParamSchema,
 } = require("../validators/applicationValidator");
+const { objectIdParamSchema } = require("../validators/common");
 const { protect } = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
 router.get("/", protect, getApplications);
-router.get("/:id", protect, validateParams(idParamSchema), getApplicationById);
+router.get("/:id", protect, validateParams(objectIdParamSchema("id")), getApplicationById);
 router.post("/", protect, validate(createApplicationSchema), createApplication);
 router.put(
   "/:id",
   protect,
-  validateParams(idParamSchema),
+  validateParams(objectIdParamSchema("id")),
   validate(updateApplicationSchema),
   updateApplication
 );
-router.delete("/:id", protect, validateParams(idParamSchema), deleteApplication);
+router.delete("/:id", protect, validateParams(objectIdParamSchema("id")), deleteApplication);
 
 module.exports = router;
