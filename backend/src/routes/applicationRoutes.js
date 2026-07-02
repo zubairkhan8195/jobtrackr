@@ -3,6 +3,7 @@ const { validate, validateParams, validateQuery } = require("../middleware/valid
 const {
   createApplication,
   getApplications,
+  getApplicationStats,
   getApplicationById,
   updateApplication,
   deleteApplication,
@@ -18,6 +19,7 @@ const { protect } = require("../middleware/authMiddleware");
 const router = express.Router();
 
 router.get("/", protect, validateQuery(applicationQuerySchema), getApplications);
+router.get("/stats", protect, getApplicationStats);
 router.get("/:id", protect, validateParams(objectIdParamSchema("id")), getApplicationById);
 router.post("/", protect, validate(createApplicationSchema), createApplication);
 router.put(

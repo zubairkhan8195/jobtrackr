@@ -6,6 +6,7 @@ const {
   buildApplicationFilter,
   buildSort,
 } = require("../utils/buildApplicationQuery");
+const { getApplicationStats: fetchApplicationStats } = require("../utils/getApplicationStats");
 
 const createApplication = asyncHandler(async (req, res) => {
   const application = await Application.create({
@@ -48,6 +49,15 @@ const getApplications = asyncHandler(async (req, res) => {
   });
 });
 
+const getApplicationStats = asyncHandler(async (req, res) => {
+  const stats = await fetchApplicationStats(req.user._id);
+
+  res.status(200).json({
+    success: true,
+    data: stats,
+  });
+});
+
 const getApplicationById = asyncHandler(async (req, res) => {
   const application = await getOwnedApplication(req.params.id, req.user._id);
 
@@ -85,6 +95,7 @@ const deleteApplication = asyncHandler(async (req, res) => {
 module.exports = {
   createApplication,
   getApplications,
+  getApplicationStats,
   getApplicationById,
   updateApplication,
   deleteApplication,
