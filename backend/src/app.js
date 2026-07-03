@@ -4,6 +4,7 @@ const authRoutes = require("./routes/authRoutes");
 const errorHandler = require("./middleware/errorHandler");
 const applicationRoutes = require("./routes/applicationRoutes");
 const noteRoutes = require("./routes/noteRoutes");
+const adminRoutes = require("./routes/adminRoutes");
 
 const app = express();
 
@@ -15,6 +16,7 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/applications", applicationRoutes);
 app.use("/api", noteRoutes);
+app.use("/api/admin", adminRoutes);
 
 // Error handler (must be after routes)
 app.use(errorHandler);

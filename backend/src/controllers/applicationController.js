@@ -24,7 +24,8 @@ const createApplication = asyncHandler(async (req, res) => {
 const getApplications = asyncHandler(async (req, res) => {
   const { page, limit, status, search, source, sort } = req.query;
 
-  const filter = buildApplicationFilter(req.user._id, {
+  const filter = buildApplicationFilter({
+    userId: req.user._id,
     status,
     source,
     search,

@@ -1,12 +1,10 @@
-const mongoose = require("mongoose");
 const Application = require("../models/Application");
 const { getSevenDaysAgo, parseStatsFacetResult } = require("./statsHelpers");
 
-const getApplicationStats = async (userId) => {
+const getGlobalStats = async () => {
   const sevenDaysAgo = getSevenDaysAgo();
 
   const [result] = await Application.aggregate([
-    { $match: { user: new mongoose.Types.ObjectId(String(userId)) } },
     {
       $facet: {
         total: [{ $count: "count" }],
@@ -22,4 +20,4 @@ const getApplicationStats = async (userId) => {
   return parseStatsFacetResult(result);
 };
 
-module.exports = { getApplicationStats };
+module.exports = { getGlobalStats };
