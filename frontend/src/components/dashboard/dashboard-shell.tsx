@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { LogOut } from "lucide-react";
 import { toast } from "sonner";
@@ -36,8 +37,14 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
     <div className="flex min-h-screen">
       <aside className="flex w-64 shrink-0 flex-col border-r border-border bg-background">
         <div className="border-b border-border px-6 py-5">
-          <p className="text-lg font-semibold tracking-tight">JobTrackr</p>
-          <p className="text-xs text-muted-foreground">Professional Suite</p>
+          <Image
+            src="/images/logo.webp"
+            alt="JobTrackr"
+            width={160}
+            height={48}
+            className="h-10 w-auto object-contain"
+            priority
+          />
         </div>
 
         <nav className="flex flex-1 flex-col gap-1 p-4">
