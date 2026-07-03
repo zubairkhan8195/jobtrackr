@@ -1,26 +1,32 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Controller, useForm } from "react-hook-form";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
+import { useLogin } from "@/hooks/auth/use-login";
+import { loginSchema, type LoginFormValues } from "@/schema";
 
 export function LoginForm() {
-  const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
+  // api
+  const { mutate, isPending } = useLogin();
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setIsLoading(true);
+  const form = useForm<LoginFormValues>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
 
-    // API integration will be added in a follow-up step.
-    window.setTimeout(() => {
-      setIsLoading(false);
-      router.push("/dashboard");
-    }, 800);
+  const { control, handleSubmit } = form;
+
+  function onSubmit(values: LoginFormValues) {
+    mutate(values);
   }
 
   return (
@@ -41,40 +47,58 @@ export function LoginForm() {
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-5">
-        <div className="space-y-2">
-          <Label htmlFor="email">Email address</Label>
-          <Input
-            id="email"
-            name="email"
-            type="email"
-            autoComplete="email"
-            placeholder="you@example.com"
-            required
-            className="h-10 px-3 text-sm"
-          />
-        </div>
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
+        <Controller
+          name="email"
+          control={control}
+          render={({ field, fieldState }) => (
+            <div className="space-y-2">
+              <Label htmlFor="email">Email address</Label>
+              <Input
+                {...field}
+                id="email"
+                type="email"
+                autoComplete="email"
+                placeholder="you@example.com"
+                aria-invalid={fieldState.invalid}
+                className="h-10 px-3 text-sm"
+              />
+              {fieldState.error ? (
+                <p className="text-xs text-destructive">{fieldState.error.message}</p>
+              ) : null}
+            </div>
+          )}
+        />
 
-        <div className="space-y-2">
-          <Label htmlFor="password">Password</Label>
-          <Input
-            id="password"
-            name="password"
-            password
-            autoComplete="current-password"
-            placeholder="Enter your password"
-            required
-            minLength={6}
-            className="h-10 px-3 text-sm"
-          />
-        </div>
+        <Controller
+          name="password"
+          control={control}
+          render={({ field, fieldState }) => (
+            <div className="space-y-2">
+              <Label htmlFor="password">Password</Label>
+              <Input
+                {...field}
+                id="password"
+                password
+                autoComplete="current-password"
+                placeholder="Enter your password"
+                aria-invalid={fieldState.invalid}
+                className="h-10 px-3 text-sm"
+              />
+              {fieldState.error ? (
+                <p className="text-xs text-destructive">{fieldState.error.message}</p>
+              ) : null}
+            </div>
+          )}
+        />
 
         <Button
           type="submit"
-          disabled={isLoading}
-          className={cn("h-10 w-full text-sm font-medium", isLoading && "opacity-80")}
+          disabled={isPending}
+          className={cn("h-10 w-full text-sm font-medium", isPending && "opacity-80")}
         >
-          {isLoading ? "Signing in..." : "Sign in"}
+          {isPending ? "Signing in..." : "Sign in"}
+          {isPending ? <Loader2 className="ml-2 size-4 animate-spin" /> : null}
         </Button>
       </form>
 

@@ -1,8 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { LogOut } from "lucide-react";
+import { toast } from "sonner";
 
+import { clearToken } from "@/lib/helpers";
 import { cn } from "@/lib/utils";
 
 const navItems = [
@@ -20,6 +23,14 @@ function isActive(pathname: string, href: string, match: "exact" | "prefix") {
 
 export function DashboardShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
+
+  function handleLogout() {
+    clearToken();
+    toast.success("Logged out successfully");
+    router.push("/auth/login");
+    router.refresh();
+  }
 
   return (
     <div className="flex min-h-screen">
@@ -49,6 +60,17 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
             );
           })}
         </nav>
+
+        <div className="border-t border-border p-4">
+          <button
+            type="button"
+            onClick={handleLogout}
+            className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+          >
+            <LogOut className="size-4" />
+            Logout
+          </button>
+        </div>
       </aside>
 
       <main className="flex-1 bg-muted/30 p-8">{children}</main>
