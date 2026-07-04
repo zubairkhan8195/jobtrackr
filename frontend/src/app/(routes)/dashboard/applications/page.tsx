@@ -1,3 +1,5 @@
+import { ApplicationsPageContent } from "@/components/applications/applications-page-content";
+
 export default function ApplicationsPage() {
-  return <h1 className="text-2xl font-semibold tracking-tight">Applications</h1>;
+  return <ApplicationsPageContent />;
 }
