@@ -2,10 +2,8 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { Logout01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { toast } from "sonner";
 
 import { DashboardMobileNav } from "@/components/dashboard/dashboard-mobile-nav";
 import { Button } from "@/components/ui/button";
@@ -22,8 +20,8 @@ import {
   USER_ROUTE_PREFIX,
   type NavItem,
 } from "@/constants";
+import { useLogout } from "@/hooks/auth/use-logout";
 import { useProfile } from "@/hooks/auth/use-profile";
-import { clearToken } from "@/lib/helpers";
 import { getUserInitials } from "@/lib/user-helpers";
 
 type DashboardHeaderProps = {
@@ -35,15 +33,8 @@ export function DashboardHeader({
   homeHref = USER_ROUTE_PREFIX,
   navItems = DASHBOARD_NAV_ITEMS,
 }: DashboardHeaderProps) {
-  const router = useRouter();
+  const logout = useLogout();
   const { data: user, isLoading } = useProfile();
-
-  function handleLogout() {
-    clearToken();
-    toast.success("Logged out successfully");
-    router.push("/auth/login");
-    router.refresh();
-  }
 
   return (
     <header className="flex h-[81px] shrink-0 items-center justify-between border-b border-border bg-background px-4 md:px-10">
@@ -84,14 +75,14 @@ export function DashboardHeader({
 
               <DropdownMenuSeparator />
 
-              <DropdownMenuItem variant="destructive" onClick={handleLogout}>
+              <DropdownMenuItem variant="destructive" onClick={logout}>
                 <HugeiconsIcon icon={Logout01Icon} strokeWidth={1.75} />
                 Logout
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         ) : (
-          <Button type="button" variant="outline" size="sm" onClick={handleLogout}>
+          <Button type="button" variant="outline" size="sm" onClick={logout}>
             Logout
           </Button>
         )}

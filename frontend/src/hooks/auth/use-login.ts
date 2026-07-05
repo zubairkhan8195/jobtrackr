@@ -5,7 +5,7 @@ import { getApiErrorMessage } from "@/lib/errors";
 import { saveAuthSession } from "@/lib/helpers";
 import { getHomeRouteForRole } from "@/constants";
 import type { AuthResponse, LoginPayload } from "@/types/auth";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
@@ -17,10 +17,12 @@ const loginUser = async (payload: LoginPayload) => {
 
 export const useLogin = () => {
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: loginUser,
     onSuccess: (data) => {
+      queryClient.clear();
       saveAuthSession(data.token, data.user.role);
       toast.success(data.message);
       router.push(getHomeRouteForRole(data.user.role));
