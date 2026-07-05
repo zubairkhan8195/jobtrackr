@@ -2,7 +2,8 @@
 
 import axiosClient from "@/lib/axiosClient";
 import { getApiErrorMessage } from "@/lib/errors";
-import { saveToken } from "@/lib/helpers";
+import { saveAuthSession } from "@/lib/helpers";
+import { getHomeRouteForRole } from "@/constants";
 import type { AuthResponse, RegisterPayload } from "@/types/auth";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
@@ -20,9 +21,9 @@ export const useRegister = () => {
   return useMutation({
     mutationFn: registerUser,
     onSuccess: (data) => {
-      saveToken(data.token);
+      saveAuthSession(data.token, data.user.role);
       toast.success(data.message);
-      router.push("/dashboard");
+      router.push(getHomeRouteForRole(data.user.role));
       router.refresh();
     },
     onError: (error) => {

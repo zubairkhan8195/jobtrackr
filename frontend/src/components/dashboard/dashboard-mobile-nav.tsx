@@ -12,8 +12,15 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer";
+import { DASHBOARD_NAV_ITEMS, type NavItem } from "@/constants";
 
-export function DashboardMobileNav() {
+type DashboardMobileNavProps = {
+  items?: NavItem[];
+};
+
+export function DashboardMobileNav({
+  items = DASHBOARD_NAV_ITEMS,
+}: DashboardMobileNavProps) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -30,12 +37,13 @@ export function DashboardMobileNav() {
       </Button>
 
       <Drawer open={open} onOpenChange={setOpen} swipeDirection="right">
-        <DrawerContent className="data-[swipe-axis=x]:sm:[--drawer-content-width:18rem] bg-white">
+        <DrawerContent className="data-[swipe-axis=x]:sm:[--drawer-content-width:18rem]">
           <DrawerHeader className="border-b border-border pb-4">
             <DrawerTitle className="text-base font-semibold">Menu</DrawerTitle>
           </DrawerHeader>
 
           <DashboardNavLinks
+            items={items}
             variant="drawer"
             onNavigate={() => setOpen(false)}
           />

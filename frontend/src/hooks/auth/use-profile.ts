@@ -6,6 +6,7 @@ import { toast } from "sonner";
 
 import axiosClient from "@/lib/axiosClient";
 import { getApiErrorMessage } from "@/lib/errors";
+import { saveRole } from "@/lib/helpers";
 import type { AuthUser, ProfileResponse } from "@/types/auth";
 
 const fetchProfile = async () => {
@@ -31,6 +32,12 @@ export function useProfile() {
     queryFn: fetchProfile,
     select: (response) => normalizeProfileUser(response.user),
   });
+
+  useEffect(() => {
+    if (query.data?.role) {
+      saveRole(query.data.role);
+    }
+  }, [query.data]);
 
   useEffect(() => {
     if (query.isError) {

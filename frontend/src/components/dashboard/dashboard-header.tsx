@@ -17,11 +17,24 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+  DASHBOARD_NAV_ITEMS,
+  USER_ROUTE_PREFIX,
+  type NavItem,
+} from "@/constants";
 import { useProfile } from "@/hooks/auth/use-profile";
 import { clearToken } from "@/lib/helpers";
 import { getUserInitials } from "@/lib/user-helpers";
 
-export function DashboardHeader() {
+type DashboardHeaderProps = {
+  homeHref?: string;
+  navItems?: NavItem[];
+};
+
+export function DashboardHeader({
+  homeHref = USER_ROUTE_PREFIX,
+  navItems = DASHBOARD_NAV_ITEMS,
+}: DashboardHeaderProps) {
   const router = useRouter();
   const { data: user, isLoading } = useProfile();
 
@@ -34,7 +47,7 @@ export function DashboardHeader() {
 
   return (
     <header className="flex h-[81px] shrink-0 items-center justify-between border-b border-border bg-background px-4 md:px-10">
-      <Link href="/dashboard" className="shrink-0 lg:hidden">
+      <Link href={homeHref} className="shrink-0 lg:hidden">
         <Image
           src="/images/logo.webp"
           alt="JobTrackr"
@@ -48,7 +61,7 @@ export function DashboardHeader() {
       <div className="hidden lg:block" />
 
       <div className="flex items-center gap-2">
-        <DashboardMobileNav />
+        <DashboardMobileNav items={navItems} />
 
         {isLoading ? (
           <Skeleton className="size-9 rounded-full" />

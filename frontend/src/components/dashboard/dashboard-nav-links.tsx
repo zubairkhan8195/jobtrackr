@@ -5,16 +5,19 @@ import { usePathname } from "next/navigation";
 
 import {
   DASHBOARD_NAV_ITEMS,
-  isDashboardNavActive,
-} from "@/components/dashboard/dashboard-nav-config";
+  type NavItem,
+} from "@/constants";
+import { isNavActive } from "@/lib/navigation";
 import { cn } from "@/lib/utils";
 
 type DashboardNavLinksProps = {
+  items?: NavItem[];
   variant?: "sidebar" | "drawer";
   onNavigate?: () => void;
 };
 
 export function DashboardNavLinks({
+  items = DASHBOARD_NAV_ITEMS,
   variant = "sidebar",
   onNavigate,
 }: DashboardNavLinksProps) {
@@ -27,8 +30,8 @@ export function DashboardNavLinks({
         variant === "drawer" && "flex flex-col",
       )}
     >
-      {DASHBOARD_NAV_ITEMS.map((item) => {
-        const active = isDashboardNavActive(pathname, item.href, item.match);
+      {items.map((item) => {
+        const active = isNavActive(pathname, item.href, item.match);
 
         return (
           <Link
