@@ -4,19 +4,19 @@ Full-stack job application tracker. Manage applications, add notes, filter and s
 
 ## Tech Stack
 
-| Layer    | Technologies                          |
-|----------|---------------------------------------|
-| Backend  | Node.js, Express, MongoDB, Mongoose   |
-| Frontend | Next.js *(coming soon)*               |
-| Auth     | JWT                                   |
-| Validation | Zod                               |
+| Layer      | Technologies                                      |
+|------------|---------------------------------------------------|
+| Backend    | Node.js, Express, MongoDB, Mongoose               |
+| Frontend   | Next.js 16, TypeScript, Tailwind CSS, React Query |
+| Auth       | JWT (role-based: `user` / `admin`)                |
+| Validation | Zod                                               |
 
 ## Project Structure
 
 ```
 jobtrackr/
 ├── backend/          # REST API
-├── frontend/         # Next.js app (M3)
+├── frontend/         # Next.js app
 ├── README.md         # This file — project overview
 └── .gitignore        # Shared ignore rules
 ```
@@ -52,25 +52,28 @@ cp .env.example .env.local
 npm run dev
 ```
 
-> Frontend is part of Milestone 3. The `frontend/` folder will be scaffolded during that phase.
+App runs at `http://localhost:3000`.
+
+For routes, project structure, and frontend details, see **[frontend/README.md](./frontend/README.md)**.
 
 ## Environment Variables
 
 Each app has its own env file. **Never commit `.env` or `.env.local`** — only the `.env.example` templates.
 
-| App      | Template              | Local file   |
-|----------|-----------------------|--------------|
-| Backend  | `backend/.env.example`  | `backend/.env` |
+| App      | Template                | Local file            |
+|----------|-------------------------|-----------------------|
+| Backend  | `backend/.env.example`  | `backend/.env`        |
 | Frontend | `frontend/.env.example` | `frontend/.env.local` |
 
 ## Features
 
 - User auth (register, login, JWT)
+- Role-based access — users and admins have separate dashboards
 - Application CRUD with ownership checks
 - Notes on applications
 - Filter, search, sort, and paginate applications
-- User dashboard stats
-- Admin panel (all applications + global stats)
+- User dashboard with stats and recent applications
+- Admin panel (all applications with owner info + global stats)
 
 ## Scripts
 
@@ -80,7 +83,7 @@ Run from each package directory:
 # Backend
 cd backend && npm run dev
 
-# Frontend (when ready)
+# Frontend
 cd frontend && npm run dev
 ```
 
