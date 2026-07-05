@@ -1,25 +1,18 @@
 const asyncHandler = require("../middleware/asyncHandler");
 const Application = require("../models/Application");
-const {
-  buildApplicationFilter,
-  buildSort,
-} = require("../utils/buildApplicationQuery");
 const { getGlobalStats: fetchGlobalStats } = require("../utils/getGlobalStats");
 
 const getAllApplications = asyncHandler(async (req, res) => {
-  const { page, limit, status, search, source, sort } = req.query;
-
-  const filter = buildApplicationFilter({ status, source, search });
-  const sortObj = buildSort(sort);
+  const { page, limit } = req.query;
   const skip = (page - 1) * limit;
 
   const [applications, total] = await Promise.all([
-    Application.find(filter)
+    Application.find({})
       .populate("user", "name email")
-      .sort(sortObj)
+      .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit),
-    Application.countDocuments(filter),
+    Application.countDocuments({}),
   ]);
 
   res.status(200).json({

@@ -63,8 +63,16 @@ const applicationQuerySchema = z
   })
   .strict();
 
+const adminApplicationsQuerySchema = z
+  .object({
+    page: z.coerce.number().min(1).default(1),
+    limit: z.coerce.number().min(1).max(50).default(10),
+  })
+  .strict();
+
 module.exports = {
   createApplicationSchema,
   updateApplicationSchema,
   applicationQuerySchema,
+  adminApplicationsQuerySchema,
 };

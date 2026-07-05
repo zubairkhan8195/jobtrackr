@@ -5,7 +5,7 @@ const {
   getAllApplications,
   getGlobalStats,
 } = require("../controllers/adminController");
-const { applicationQuerySchema } = require("../validators/applicationValidator");
+const { adminApplicationsQuerySchema } = require("../validators/applicationValidator");
 
 const router = express.Router();
 
@@ -13,7 +13,7 @@ router.get(
   "/applications",
   protect,
   authorize("admin"),
-  validateQuery(applicationQuerySchema),
+  validateQuery(adminApplicationsQuerySchema),
   getAllApplications,
 );
 
