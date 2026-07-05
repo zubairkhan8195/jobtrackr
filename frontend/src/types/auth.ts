@@ -32,3 +32,14 @@ export type ApiErrorResponse = {
   message: string;
   errors?: ApiValidationError[];
 };
+
+export type ProfileResponse = {
+  success: true;
+  user: {
+    _id?: string;
+    id?: string;
+    name: string;
+    email: string;
+    role: string;
+  };
+};
